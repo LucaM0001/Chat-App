@@ -7,10 +7,19 @@ import ForgotPassword from "./containers/Forms/ForgotPassword/ForgotPassword";
 import { useEffect, useState } from "react";
 
 const App = (props) => {
+  /* Inscription réussi ? */
   const [isSignedIn, setIsSignedIn] = useState(false);
+  /* Connexion réussi ? */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  /* Adresse email déja utilisé ? */
+  const [isEmailUsed, setIsEmailUsed] = useState(false);
+  /* Mot de passe indentique  */
+  const [isSamePassword, setIsSamePassword] = useState(false);
+  /* Image valide */
+  const [isNotValidImage, setIsNotValidImage] = useState(false);
+  /* Navigation */
   const navigate = useNavigate();
-
+  /* Utilisateurs */
   const [users, setUsers] = useState([
     {
       id: Date.now(),
@@ -30,11 +39,14 @@ const App = (props) => {
       : false;
     /* Adresse email */
     if (isAlreadySigned === false) {
+      setIsEmailUsed(false);
       /* Mot de passe */
       if (newUser.password === newUser.confirmPassword) {
+        setIsSamePassword(false);
         /* Identifiant */
         newUser.id = Date.now();
         /* Photo de profil */
+        const validImageExtension = ["png", "jpg", "jpeg"];
         if (newUser.profilePicture === "")
           newUser.profilePicture = "default.png";
         else {
@@ -42,16 +54,18 @@ const App = (props) => {
           const profile = newUser.profilePicture;
           const profileArray = profile.split("\\");
           profileFile = profileArray[2];
-          newUser.profilePicture = profileFile;
+          const profileFileExtension = profileFile.split(".").at(1);
+          console.log(profileFileExtension);
+
+          if (validImageExtension.includes(profileFileExtension)) {
+            newUser.profilePicture = profileFile;
+            setUsers((oldUsers) => [...oldUsers, newUser]);
+            setIsSignedIn(true);
+            navigate("/");
+          } else setIsNotValidImage(true);
         }
-        setUsers((oldUsers) => [...oldUsers, newUser]);
-        setIsSignedIn(true);
-        navigate("/");
-      } else alert("Les 2 mot de passe doivent être identique");
-    } else
-      alert(
-        `${newUser.email} : cette adresse email est déja utilisé par un autre utilisateur`
-      );
+      } else setIsSamePassword(true);
+    } else setIsEmailUsed(true);
   };
 
   /* Connexion */
@@ -74,13 +88,16 @@ const App = (props) => {
       );
   };
 
+  /* Mot de passe oublier */
   const handleForgotPassword = (email) => {
     const user = users.find((user) => user.email === email);
     navigate(`/forgotpassword/${user.id}`);
   };
 
+  /* Retour en arrière */
   const handleGoBack = () => navigate(-1);
 
+  /* Déconnexion */
   const handleLogOut = () => {
     setIsLoggedIn(false);
     navigate("/");
@@ -107,7 +124,17 @@ const App = (props) => {
           />
         )}
 
-        <Route path="/signup" element={<SignUpForm signUp={handleSignUp} />} />
+        <Route
+          path="/signup"
+          element={
+            <SignUpForm
+              isEmailUsed={isEmailUsed}
+              isSamePassword={isSamePassword}
+              isNotValidImage={isNotValidImage}
+              signUp={handleSignUp}
+            />
+          }
+        />
         <Route
           path="/forgotpassword/:id"
           element={<ForgotPassword goBack={handleGoBack} users={users} />}

@@ -4,12 +4,30 @@ import Logo from "../../../components/Logo/Logo";
 import Title from "../../../components/Title/Title";
 import { withFormik } from "formik";
 import * as Yup from "yup";
+import Alert from "../../../components/Alert/Alert";
+import "../Form.css";
+import { showHideConfirmPassword, showHidePassword } from "../Form";
 
 const SignUpForm = (props) => {
   return (
     <div id="signUpForm">
       <Logo />
       <Title>Sign Up</Title>
+      {props.isEmailUsed && (
+        <Alert color="alert-warning">
+          {props.values.email} : cette adresse email n'est plus disponible
+        </Alert>
+      )}
+      {props.isSamePassword && (
+        <Alert color="alert-danger">
+          Les 2 mot de passe doivent être identique
+        </Alert>
+      )}
+      {props.isNotValidImage && (
+        <Alert color="alert-info">
+          L'image doit porter l'une des extensions suivante : png, jpg ou jpeg
+        </Alert>
+      )}
       <form id="signInForm">
         <div className="row">
           <div className="col-6">
@@ -109,7 +127,10 @@ const SignUpForm = (props) => {
                   onBlur={props.handleBlur}
                 />
                 <span className="input-group-text">
-                  <i className="bi bi-eye-fill"></i>
+                  <i
+                    className="bi bi-eye-fill"
+                    onClick={(e) => showHidePassword(e)}
+                  ></i>
                 </span>
               </div>
               {props.touched.password && props.errors.password && (
@@ -137,7 +158,10 @@ const SignUpForm = (props) => {
                   onBlur={props.handleBlur}
                 />
                 <span className="input-group-text">
-                  <i className="bi bi-eye-fill"></i>
+                  <i
+                    className="bi bi-eye-fill"
+                    onClick={(e) => showHideConfirmPassword(e)}
+                  ></i>
                 </span>
               </div>
               {props.touched.confirmPassword &&
@@ -205,7 +229,7 @@ export default withFormik({
     email: Yup.string()
       .min(15, "Email >= 15 caractères")
       .max(30, "Email <= 30 caractères")
-      .required("email requis"),
+      .required("Adresse email requis"),
     password: Yup.string()
       .min(8, "Mot de passe >= 8 caractères")
       .max(20, "Mot de passe <= 20 caractères")

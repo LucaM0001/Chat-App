@@ -5,6 +5,8 @@ import Title from "../../../components/Title/Title";
 import Alert from "../../../components/Alert/Alert";
 import { withFormik } from "formik";
 import * as Yup from "yup";
+import "../Form.css";
+import { showHidePassword } from "../Form";
 
 const LoginForm = (props) => {
   return (
@@ -12,7 +14,7 @@ const LoginForm = (props) => {
       <Logo />
       <Title>Login</Title>
       {props.IsSignIn && (
-        <Alert color="alert-success">Inscription terminé</Alert>
+        <Alert color="alert-success">Inscription réussie</Alert>
       )}
       <form>
         <div className="form-group mb-3">
@@ -58,7 +60,10 @@ const LoginForm = (props) => {
               onBlur={props.handleBlur}
             />
             <span className="input-group-text">
-              <i className="bi bi-eye-fill"></i>
+              <i
+                className="bi bi-eye-fill"
+                onClick={(e) => showHidePassword(e)}
+              ></i>
             </span>
           </div>
           {props.touched.password && props.errors.password && (
@@ -95,7 +100,7 @@ export default withFormik({
     email: Yup.string()
       .min(15, "Email >= 15 caractères")
       .max(30, "Email <= 30 caractères")
-      .required("email requis"),
+      .required("Adresse email requis"),
     password: Yup.string()
       .min(8, "Mot de passe >= 8 caractères")
       .max(20, "Mot de passe <= 20 caractères")
