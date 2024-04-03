@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const App = (props) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([
@@ -22,7 +23,8 @@ const App = (props) => {
     },
   ]);
 
-  const handleSignup = (newUser) => {
+  /* Inscription */
+  const handleSignUp = (newUser) => {
     const isAlreadySigned = users.find((user) => user.email === newUser.email)
       ? true
       : false;
@@ -52,13 +54,36 @@ const App = (props) => {
       );
   };
 
+  /* Connexion */
+  const handleLogIn = (email, password) => {
+    const isAlreadySigned = users.find(
+      (user) => user.email === email && user.password === password
+    )
+      ? true
+      : false;
+
+    if (isAlreadySigned) {
+      const user = users.find(
+        (user) => user.email === email && user.password === password
+      );
+      setIsLoggedIn(true);
+      navigate(`/users/${user.id}`);
+    } else
+      alert(
+        "Vous n'êtes pas encore inscrit || Adresse email ou Mot de passe incorrect"
+      );
+  };
+
   return (
     <div className="container d-flex justify-content-center my-4">
       <Routes>
-        <Route path="/" element={<LoginForm signIn={isSignedIn} />} />
-        <Route path="/signup" element={<SignUpForm signup={handleSignup} />} />
+        <Route
+          path="/"
+          element={<LoginForm logIn={handleLogIn} IsSignIn={isSignedIn} />}
+        />
+        <Route path="/signup" element={<SignUpForm signUp={handleSignUp} />} />
         <Route path="/forgotpassword" Component={ForgotPassword} />
-        <Route path="/users" Component={Users} />
+        <Route path="/users/:id" Component={Users} />
         <Route path="/chat" Component={Chat} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

@@ -216,6 +216,6 @@ export default withFormik({
       .required("Confirmation de mot de passe requis"),
   }),
   handleSubmit: (values, { props }) => {
-    props.signup({ ...values });
+    props.signUp({ ...values });
   },
 })(SignUpForm);
