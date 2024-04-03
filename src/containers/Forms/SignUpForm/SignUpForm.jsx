@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import Logo from "../../../components/Logo/Logo";
 import Title from "../../../components/Title/Title";
+import { withFormik } from "formik";
+import * as Yup from "yup";
 
 const SignUpForm = (props) => {
   return (
     <div id="signUpForm">
       <Logo />
       <Title>Sign Up</Title>
-      <form>
+      <form id="signInForm">
         <div className="row">
           <div className="col-6">
             <div className="form-group mb-3">
@@ -25,8 +27,14 @@ const SignUpForm = (props) => {
                   name="firstname"
                   id="firstname"
                   placeholder="Votre ou vos prénom(s)"
+                  value={props.values.firstname}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
                 />
               </div>
+              {props.touched.firstname && props.errors.firstname && (
+                <span style={{ color: "red" }}>{props.errors.firstname}</span>
+              )}
             </div>
           </div>
           <div className="col-6">
@@ -44,8 +52,14 @@ const SignUpForm = (props) => {
                   name="lastname"
                   id="lastname"
                   placeholder="Votre Nom"
+                  value={props.values.lastname}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
                 />
               </div>
+              {props.touched.lastname && props.errors.lastname && (
+                <span style={{ color: "red" }}>{props.errors.lastname}</span>
+              )}
             </div>
           </div>
         </div>
@@ -64,8 +78,14 @@ const SignUpForm = (props) => {
               name="email"
               id="email"
               placeholder="email@gmail.com"
+              value={props.values.email}
+              onChange={props.handleChange}
+              onBlur={props.handleBlur}
             />
           </div>
+          {props.touched.email && props.errors.email && (
+            <span style={{ color: "red" }}>{props.errors.email}</span>
+          )}
         </div>
 
         <div className="row">
@@ -84,11 +104,17 @@ const SignUpForm = (props) => {
                   name="password"
                   id="password"
                   placeholder="********"
+                  value={props.values.password}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
                 />
                 <span className="input-group-text">
                   <i className="bi bi-eye-fill"></i>
                 </span>
               </div>
+              {props.touched.password && props.errors.password && (
+                <span style={{ color: "red" }}>{props.errors.password}</span>
+              )}
             </div>
           </div>
           <div className="col-6">
@@ -103,36 +129,48 @@ const SignUpForm = (props) => {
                 <input
                   className="form-control"
                   type="password"
-                  name="password"
+                  name="confirmPassword"
                   id="confirmPassword"
                   placeholder="********"
+                  value={props.values.confirmPassword}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
                 />
                 <span className="input-group-text">
                   <i className="bi bi-eye-fill"></i>
                 </span>
               </div>
+              {props.touched.confirmPassword &&
+                props.errors.confirmPassword && (
+                  <span style={{ color: "red" }}>
+                    {props.errors.confirmPassword}
+                  </span>
+                )}
             </div>
           </div>
         </div>
 
         <div className="form-group mb-3">
-          <label htmlFor="profilPicture" className="form-label">
+          <label htmlFor="profilePicture" className="form-label">
             Photo de profil
           </label>
           <div className="input-group">
             <input
               className="form-control"
               type="file"
-              name="profilPicture"
-              id="profilPicture"
+              name="profilePicture"
+              id="profilePicture"
               placeholder="********"
+              value={props.values.profilePicture}
+              onChange={props.handleChange}
+              onBlur={props.handleBlur}
             />
             <span className="input-group-text">
               <i className="bi bi-file-image-fill"></i>
             </span>
           </div>
         </div>
-        <Button color="btn-primary" type="submit">
+        <Button color="btn-primary" type="submit" clic={props.handleSubmit}>
           Sign Up
         </Button>
         <div>
@@ -143,4 +181,41 @@ const SignUpForm = (props) => {
   );
 };
 
-export default SignUpForm;
+export default withFormik({
+  mapPropsToValues: () => {
+    return {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      profilePicture: "",
+    };
+  },
+  validationSchema: Yup.object().shape({
+    firstname: Yup.string()
+      .min(3, "Prénom >= 3 caractères")
+      .max(20, "Prénom <= 20 caractères")
+      .required("Prénom requis"),
+    lastname: Yup.string()
+      .min(3, "Nom >= 3 caractères")
+      .max(30, "Nom <= 30 caractères")
+      .uppercase("Majuscule")
+      .required("Nom requis"),
+    email: Yup.string()
+      .min(15, "Email >= 15 caractères")
+      .max(30, "Email <= 30 caractères")
+      .required("email requis"),
+    password: Yup.string()
+      .min(8, "Mot de passe >= 8 caractères")
+      .max(20, "Mot de passe <= 20 caractères")
+      .required("Mot de passe requis"),
+    confirmPassword: Yup.string()
+      .min(8, "Mot de passe >= 8 caractères")
+      .max(20, "Mot de passe <= 20 caractères")
+      .required("Confirmation de mot de passe requis"),
+  }),
+  handleSubmit: (values, { props }) => {
+    props.signup({ ...values });
+  },
+})(SignUpForm);

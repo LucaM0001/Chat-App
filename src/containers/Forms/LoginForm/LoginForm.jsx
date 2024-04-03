@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import Logo from "../../../components/Logo/Logo";
 import Title from "../../../components/Title/Title";
+import Alert from "../../../components/Alert/Alert";
 
 const LoginForm = (props) => {
   return (
     <div id="loginForm">
       <Logo />
       <Title>Login</Title>
+      {props.signIn && <Alert color="alert-success">Inscription terminé</Alert>}
       <form>
         <div className="form-group mb-3">
           <label htmlFor="email" className="form-label">
