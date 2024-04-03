@@ -101,7 +101,10 @@ const App = (props) => {
             }
           />
         ) : (
-          <Route path="/users/:id" element={<Users logOut={handleLogOut} />} />
+          <Route
+            path="/users/:id"
+            element={<Users users={users} logOut={handleLogOut} />}
+          />
         )}
 
         <Route path="/signup" element={<SignUpForm signUp={handleSignUp} />} />

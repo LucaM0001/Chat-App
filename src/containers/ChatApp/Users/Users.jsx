@@ -1,13 +1,64 @@
-import defaultProfil from "../../../assets/img/upload/default.png";
+import { useParams } from "react-router-dom";
+import AbasProfil from "../../../assets/img/upload/abas.png";
+import BobProfil from "../../../assets/img/upload/bob.png";
+import DefaultProfil from "../../../assets/img/upload/default.png";
+import EkramProfil from "../../../assets/img/upload/ekram.jpg";
+import EliasProfil from "../../../assets/img/upload/elias.jpg";
+import IbroProfil from "../../../assets/img/upload/ibro.png";
+import JohnProfil from "../../../assets/img/upload/john.jpg";
+import kerenProfil from "../../../assets/img/upload/keren.jpeg";
+import MathieuProfil from "../../../assets/img/upload/mathieu.png";
+import NickProfil from "../../../assets/img/upload/nick.png";
 import Button from "../../../components/Button/Button";
 import User from "./User/User";
 
 const Users = (props) => {
+  const { id } = useParams();
+  const users = props.users;
+  const currentUser = users.find((user) => user.id === Number(id));
+  console.log(users);
+
   const userProfileStyle = {
     width: "60px",
     height: "60px",
     borderRadius: "50%",
   };
+
+  let profilePicture = "";
+  switch (currentUser.profilePicture) {
+    case "abas.png":
+      profilePicture = AbasProfil;
+      break;
+    case "bob.png":
+      profilePicture = BobProfil;
+      break;
+    case "default.png":
+      profilePicture = DefaultProfil;
+      break;
+    case "ekram.jpg":
+      profilePicture = EkramProfil;
+      break;
+    case "elias.jpg":
+      profilePicture = EliasProfil;
+      break;
+    case "ibro.png":
+      profilePicture = IbroProfil;
+      break;
+    case "john.jpg":
+      profilePicture = JohnProfil;
+      break;
+    case "keren.jpeg":
+      profilePicture = kerenProfil;
+      break;
+    case "mathieu.png":
+      profilePicture = MathieuProfil;
+      break;
+    case "nick.png":
+      profilePicture = NickProfil;
+      break;
+    default:
+      null;
+  }
 
   return (
     <div id="users" className="w-75">
@@ -17,14 +68,10 @@ const Users = (props) => {
       >
         <div className="d-flex align-items-center">
           <div>
-            <img
-              src={defaultProfil}
-              alt="userProfile"
-              style={userProfileStyle}
-            />
+            <img src={profilePicture} alt={id} style={userProfileStyle} />
           </div>
           <div className="ms-4">
-            <h4>Utilisateur ACTUEL</h4>
+            <h4>{`${currentUser.firstname} ${currentUser.lastname}`}</h4>
             <div className="text-dark-emphasis">Active</div>
           </div>
         </div>
@@ -49,14 +96,9 @@ const Users = (props) => {
       </div>
       <div id="body" style={{ height: "400px", overflow: "auto" }}>
         <ul>
-          <User />
-          <User />
-          <User />
-          <User />
-          <User />
-          <User />
-          <User />
-          <User />
+          {users.map((user) => (
+            <User key={user.id} {...user} />
+          ))}
         </ul>
       </div>
     </div>
