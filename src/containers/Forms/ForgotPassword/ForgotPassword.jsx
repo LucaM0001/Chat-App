@@ -16,7 +16,7 @@ const ForgotPassword = (props) => {
         Mot de passes : {user.password} <br />
       </Alert>
       <Button color="btn-dark" type="button" clic={props.goBack}>
-        Retour
+        <i className="bi bi-arrow-left"></i> Retour
       </Button>
     </div>
   );

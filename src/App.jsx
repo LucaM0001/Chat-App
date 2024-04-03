@@ -4,7 +4,8 @@ import SignUpForm from "./containers/Forms/SignUpForm/SignUpForm";
 import Users from "./containers/ChatApp/Users/Users";
 import Chat from "./containers/ChatApp/Chat/Chat";
 import ForgotPassword from "./containers/Forms/ForgotPassword/ForgotPassword";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Modal from "./components/Modal/Modal";
 
 const App = (props) => {
   /* Inscription réussi ? */
@@ -17,6 +18,9 @@ const App = (props) => {
   const [isSamePassword, setIsSamePassword] = useState(false);
   /* Image valide */
   const [isNotValidImage, setIsNotValidImage] = useState(false);
+  /* Déconnexion */
+  const [isLogOut, setIsLogOut] = useState(false);
+
   /* Navigation */
   const navigate = useNavigate();
   /* Utilisateurs */
@@ -99,8 +103,19 @@ const App = (props) => {
 
   /* Déconnexion */
   const handleLogOut = () => {
+    setIsLogOut(true);
+  };
+
+  /* Confirmation déconnexion : Oui */
+  const handleConfirmLogout = () => {
     setIsLoggedIn(false);
+    setIsLogOut(false);
     navigate("/");
+  };
+
+  /* Réfus déconnexion : Nom */
+  const handleDeniedLogout = () => {
+    setIsLogOut(false);
   };
 
   return (
@@ -120,7 +135,15 @@ const App = (props) => {
         ) : (
           <Route
             path="/users/:id"
-            element={<Users users={users} logOut={handleLogOut} />}
+            element={
+              <Users
+                users={users}
+                isLogOut={isLogOut}
+                confirmLogOut={handleConfirmLogout}
+                deniedLogOut={handleDeniedLogout}
+                logOut={handleLogOut}
+              />
+            }
           />
         )}
 
@@ -141,6 +164,7 @@ const App = (props) => {
         />
         <Route path="/chat" Component={Chat} />
         {!isLoggedIn && <Route path="*" element={<Navigate to="/" />} />}
+        <Route path="/modal" Component={Modal} />
       </Routes>
     </div>
   );

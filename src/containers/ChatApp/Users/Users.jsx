@@ -11,12 +11,12 @@ import MathieuProfil from "../../../assets/img/upload/mathieu.png";
 import NickProfil from "../../../assets/img/upload/nick.png";
 import Button from "../../../components/Button/Button";
 import User from "./User/User";
+import Modal from "../../../components/Modal/Modal";
 
 const Users = (props) => {
   const { id } = useParams();
   const users = props.users;
   const currentUser = users.find((user) => user.id === Number(id));
-  console.log(users);
 
   const userProfileStyle = {
     width: "60px",
@@ -62,6 +62,12 @@ const Users = (props) => {
 
   return (
     <div id="users" className="w-75">
+      {props.isLogOut && (
+        <Modal
+          confirmLogOut={props.confirmLogOut}
+          deniedLogout={props.deniedLogOut}
+        />
+      )}
       <div
         id="header"
         className="d-flex justify-content-between align-items-center"
@@ -76,7 +82,7 @@ const Users = (props) => {
           </div>
         </div>
         <Button color="btn-dark" type="button" clic={props.logOut}>
-          Déconnexion
+          <i className="bi bi-door-open-fill"></i> Déconnexion
         </Button>
       </div>
       <hr />
