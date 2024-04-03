@@ -74,18 +74,43 @@ const App = (props) => {
       );
   };
 
+  const handleForgotPassword = (email) => {
+    const user = users.find((user) => user.email === email);
+    navigate(`/forgotpassword/${user.id}`);
+  };
+
+  const handleGoBack = () => navigate(-1);
+
+  const handleLogOut = () => {
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
   return (
     <div className="container d-flex justify-content-center my-4">
       <Routes>
-        <Route
-          path="/"
-          element={<LoginForm logIn={handleLogIn} IsSignIn={isSignedIn} />}
-        />
+        {isLoggedIn === false ? (
+          <Route
+            path="/"
+            element={
+              <LoginForm
+                forgotPassword={handleForgotPassword}
+                logIn={handleLogIn}
+                IsSignIn={isSignedIn}
+              />
+            }
+          />
+        ) : (
+          <Route path="/users/:id" element={<Users logOut={handleLogOut} />} />
+        )}
+
         <Route path="/signup" element={<SignUpForm signUp={handleSignUp} />} />
-        <Route path="/forgotpassword" Component={ForgotPassword} />
-        <Route path="/users/:id" Component={Users} />
+        <Route
+          path="/forgotpassword/:id"
+          element={<ForgotPassword goBack={handleGoBack} users={users} />}
+        />
         <Route path="/chat" Component={Chat} />
-        <Route path="*" element={<Navigate to="/" />} />
+        {!isLoggedIn && <Route path="*" element={<Navigate to="/" />} />}
       </Routes>
     </div>
   );

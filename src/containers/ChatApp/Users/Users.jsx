@@ -28,7 +28,7 @@ const Users = (props) => {
             <div className="text-dark-emphasis">Active</div>
           </div>
         </div>
-        <Button color="btn-dark" type="button">
+        <Button color="btn-dark" type="button" clic={props.logOut}>
           Déconnexion
         </Button>
       </div>

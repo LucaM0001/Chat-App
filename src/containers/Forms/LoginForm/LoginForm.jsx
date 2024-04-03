@@ -65,7 +65,13 @@ const LoginForm = (props) => {
             <span style={{ color: "red" }}>{props.errors.password}</span>
           )}
           <br />
-          <Link to="/forgotpassword">Mot de passe oublier ?</Link>
+          <Button
+            type="button"
+            color="btn-link"
+            clic={() => props.forgotPassword(props.values.email)}
+          >
+            Mot de passe oublier ?
+          </Button>
         </div>
         <Button color="btn-primary" type="submit" clic={props.handleSubmit}>
           login
