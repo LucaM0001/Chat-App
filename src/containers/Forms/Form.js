@@ -9,16 +9,18 @@ export const showHidePassword = (e) => {
   /* Input */
   const input = document.getElementById("password");
 
-  if (iconClass === "bi-eye-fill") {
-    /* Eye */
-    icon.classList.remove("bi-eye-fill");
-    icon.classList.add("bi-eye-slash-fill");
-    input.type = "text";
-  } else {
-    /* Eye-slash */
-    icon.classList.add("bi-eye-fill");
-    icon.classList.remove("bi-eye-slash-fill");
-    input.type = "password";
+  if (input.value) {
+    if (iconClass === "bi-eye-fill") {
+      /* Eye */
+      icon.classList.remove("bi-eye-fill");
+      icon.classList.add("bi-eye-slash-fill");
+      input.type = "text";
+    } else {
+      /* Eye-slash */
+      icon.classList.add("bi-eye-fill");
+      icon.classList.remove("bi-eye-slash-fill");
+      input.type = "password";
+    }
   }
 };
 

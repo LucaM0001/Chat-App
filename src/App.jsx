@@ -118,6 +118,22 @@ const App = (props) => {
     setIsLogOut(false);
   };
 
+  /* Changement de profil */
+  const handleChangeProfilePicture = (image, userId) => {
+    const newProfilePicture = image.split("\\").at(2);
+    const newUsers = [...users];
+
+    const newUser = newUsers.find((user) => user.id === Number(userId));
+    newUser.profilePicture = newProfilePicture;
+
+    const newUserIndex = newUsers.findIndex(
+      (user) => user.id === Number(userId)
+    );
+    newUsers[newUserIndex] = newUser;
+
+    setUsers(newUsers);
+  };
+
   return (
     <div className="container d-flex justify-content-center my-4">
       <Routes>
@@ -142,6 +158,7 @@ const App = (props) => {
                 confirmLogOut={handleConfirmLogout}
                 deniedLogOut={handleDeniedLogout}
                 logOut={handleLogOut}
+                changeProfilePicture={handleChangeProfilePicture}
               />
             }
           />

@@ -12,6 +12,7 @@ import NickProfil from "../../../assets/img/upload/nick.png";
 import Button from "../../../components/Button/Button";
 import User from "./User/User";
 import Modal from "../../../components/Modal/Modal";
+import "./Users.css";
 
 const Users = (props) => {
   const { id } = useParams();
@@ -19,8 +20,8 @@ const Users = (props) => {
   const currentUser = users.find((user) => user.id === Number(id));
 
   const userProfileStyle = {
-    width: "60px",
-    height: "60px",
+    width: "100px",
+    height: "100px",
     borderRadius: "50%",
   };
 
@@ -75,6 +76,17 @@ const Users = (props) => {
         <div className="d-flex align-items-center">
           <div>
             <img src={profilePicture} alt={id} style={userProfileStyle} />
+            <label htmlFor="newProfilePicture">
+              <i className="bi bi-camera-fill"></i>
+            </label>
+            <input
+              type="file"
+              id="newProfilePicture"
+              className="d-none"
+              onChange={(e) =>
+                props.changeProfilePicture(e.currentTarget.value, id)
+              }
+            />
           </div>
           <div className="ms-4">
             <h4>{`${currentUser.firstname} ${currentUser.lastname}`}</h4>
