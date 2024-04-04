@@ -65,10 +65,12 @@ const Users = (props) => {
     <div id="users" className="w-75">
       {props.isLogOut && (
         <Modal
-          id={id}
-          confirmLogOut={props.confirmLogOut}
-          deniedLogout={props.deniedLogOut}
-        />
+          title="Déconnexion ?"
+          confirm={() => props.confirmLogOut(id)}
+          denied={props.deniedLogOut}
+        >
+          Souhaiter-vous vraiment vous déconnecter ?
+        </Modal>
       )}
       <div
         id="header"

@@ -156,7 +156,7 @@ const App = (props) => {
   return (
     <div className="container d-flex justify-content-center my-4">
       <Routes>
-        {isLoggedIn === false ? (
+        {isLoggedIn === false && isLogOut === false ? (
           <Route
             path="/"
             element={
