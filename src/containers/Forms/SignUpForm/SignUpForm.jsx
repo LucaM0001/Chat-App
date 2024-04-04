@@ -28,7 +28,7 @@ const SignUpForm = (props) => {
           L'image doit porter l'une des extensions suivante : png, jpg ou jpeg
         </Alert>
       )}
-      <form id="signInForm">
+      <form id="signInForm" encType="multipart/form-data">
         <div className="row">
           <div className="col-6">
             <div className="form-group mb-3">

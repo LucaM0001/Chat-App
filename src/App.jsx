@@ -60,7 +60,6 @@ const App = (props) => {
           const profileArray = profile.split("\\");
           profileFile = profileArray[2];
           const profileFileExtension = profileFile.split(".").at(1);
-          console.log(profileFileExtension);
 
           if (validImageExtension.includes(profileFileExtension)) {
             newUser.profilePicture = profileFile;

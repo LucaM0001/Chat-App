@@ -1,5 +1,5 @@
 .bi-camera-fill {
-    position: fixed;
+    position: absolute;
     font-size: 20px;
     top: 88px;
     left: 330px;
