@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import AbasProfil from "../../../../assets/img/upload/abas.png";
 import BobProfil from "../../../../assets/img/upload/bob.png";
 import DefaultProfil from "../../../../assets/img/upload/default.png";
@@ -53,27 +54,30 @@ const User = (props) => {
   }
 
   return (
-    <>
+    <Link to={`/chat/${props.id}`} className="nav-link">
       <li className="d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <div>
             <img
+              className="shadow"
               src={profilePicture}
               alt="otherUserProfile"
               style={otherUserProfileStyle}
             />
           </div>
           <div className="ps-4">
-            <div className="fw-bold">{`${props.firstname} ${props.lastname}`}</div>
+            <h5 className="fw-bold">{`${props.firstname} ${props.lastname}`}</h5>
             <div>Dernière message envoyé</div>
           </div>
         </div>
-        <div className="text-success">
+        <div
+          className={`${props.status ? "text-success" : "text-dark-emphasis"}`}
+        >
           <i className="bi bi-circle-fill" style={{ fontSize: "10px" }}></i>
         </div>
       </li>
       <hr />
-    </>
+    </Link>
   );
 };
 

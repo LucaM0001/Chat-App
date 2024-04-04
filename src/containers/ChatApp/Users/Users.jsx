@@ -65,6 +65,7 @@ const Users = (props) => {
     <div id="users" className="w-75">
       {props.isLogOut && (
         <Modal
+          id={id}
           confirmLogOut={props.confirmLogOut}
           deniedLogout={props.deniedLogOut}
         />
@@ -75,7 +76,12 @@ const Users = (props) => {
       >
         <div className="d-flex align-items-center">
           <div>
-            <img src={profilePicture} alt={id} style={userProfileStyle} />
+            <img
+              className="shadow"
+              src={profilePicture}
+              alt={id}
+              style={userProfileStyle}
+            />
             <label htmlFor="newProfilePicture">
               <i className="bi bi-camera-fill"></i>
             </label>
@@ -89,8 +95,14 @@ const Users = (props) => {
             />
           </div>
           <div className="ms-4">
-            <h4>{`${currentUser.firstname} ${currentUser.lastname}`}</h4>
-            <div className="text-dark-emphasis">Active</div>
+            <h3>{`${currentUser.firstname} ${currentUser.lastname}`}</h3>
+            <div
+              className={`${
+                currentUser.status ? "text-success" : "text-dark-emphasis"
+              } text-success fw-bold`}
+            >
+              {currentUser.status ? "Online" : "Offline"}
+            </div>
           </div>
         </div>
         <Button color="btn-dark" type="button" clic={props.logOut}>

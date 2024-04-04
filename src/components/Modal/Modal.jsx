@@ -14,7 +14,7 @@ const Modal = (props) => {
               <Button
                 type="button"
                 color="btn-link text-decoration-none col-6 py-3 m-0 rounded-0 border-end"
-                clic={props.confirmLogOut}
+                clic={() => props.confirmLogOut(props.id)}
               >
                 Oui
               </Button>

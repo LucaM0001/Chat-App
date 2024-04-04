@@ -33,6 +33,7 @@ const App = (props) => {
       password: "00000000",
       confirmPassword: "00000000",
       profilePicture: "default.png",
+      status: false,
     },
   ]);
 
@@ -74,16 +75,25 @@ const App = (props) => {
 
   /* Connexion */
   const handleLogIn = (email, password) => {
-    const isAlreadySigned = users.find(
+    const newUsers = [...users];
+    const isAlreadySigned = newUsers.find(
       (user) => user.email === email && user.password === password
     )
       ? true
       : false;
 
     if (isAlreadySigned) {
-      const user = users.find(
+      const user = newUsers.find(
         (user) => user.email === email && user.password === password
       );
+      const userID = newUsers.findIndex(
+        (user) => user.email === email && user.password === password
+      );
+
+      user.status = true;
+      newUsers[userID] = user;
+
+      setUsers(newUsers);
       setIsLoggedIn(true);
       navigate(`/users/${user.id}`);
     } else
@@ -107,8 +117,15 @@ const App = (props) => {
   };
 
   /* Confirmation déconnexion : Oui */
-  const handleConfirmLogout = () => {
+  const handleConfirmLogout = (id) => {
+    const newUsers = [...users];
+    const newUserID = newUsers.findIndex((user) => user.id === Number(id));
+    const newUser = newUsers[newUserID];
+    newUser.status = false;
+
+    setUsers(newUsers);
     setIsLoggedIn(false);
+    setIsSignedIn(false);
     setIsLogOut(false);
     navigate("/");
   };
@@ -120,18 +137,20 @@ const App = (props) => {
 
   /* Changement de profil */
   const handleChangeProfilePicture = (image, userId) => {
-    const newProfilePicture = image.split("\\").at(2);
-    const newUsers = [...users];
+    if (image) {
+      const newProfilePicture = image.split("\\").at(2);
+      const newUsers = [...users];
 
-    const newUser = newUsers.find((user) => user.id === Number(userId));
-    newUser.profilePicture = newProfilePicture;
+      const newUser = newUsers.find((user) => user.id === Number(userId));
+      newUser.profilePicture = newProfilePicture;
 
-    const newUserIndex = newUsers.findIndex(
-      (user) => user.id === Number(userId)
-    );
-    newUsers[newUserIndex] = newUser;
+      const newUserIndex = newUsers.findIndex(
+        (user) => user.id === Number(userId)
+      );
+      newUsers[newUserIndex] = newUser;
 
-    setUsers(newUsers);
+      setUsers(newUsers);
+    }
   };
 
   return (
@@ -179,7 +198,10 @@ const App = (props) => {
           path="/forgotpassword/:id"
           element={<ForgotPassword goBack={handleGoBack} users={users} />}
         />
-        <Route path="/chat" Component={Chat} />
+        <Route
+          path="/chat/:receiverID"
+          element={<Chat goBack={handleGoBack} users={users} />}
+        />
         {!isLoggedIn && <Route path="*" element={<Navigate to="/" />} />}
         <Route path="/modal" Component={Modal} />
       </Routes>
