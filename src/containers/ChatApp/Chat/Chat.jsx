@@ -63,6 +63,7 @@ const Chat = (props) => {
     height: "40px",
     borderRadius: "50%",
   };
+
   return (
     <div id="chat" className="w-75">
       <div
@@ -103,7 +104,7 @@ const Chat = (props) => {
       <div
         id="body"
         className="px-4"
-        style={{ height: "400px", overflow: "auto" }}
+        style={{ height: "440px", overflow: "auto" }}
       >
         <div className="d-flex align-items-center">
           <div>
@@ -113,11 +114,7 @@ const Chat = (props) => {
               style={senderUserProfilStyle}
             />
           </div>
-          <div className={Styles.messageSended}>
-            Porttitor netus parturient sociosqu orci diam interdum primis
-            lacinia nostra dui, venenatis mus vestibulum mollis montes quis
-            viverra taciti risus est pulvinar
-          </div>
+          <div className={Styles.messageReceived}>Hi !!</div>
           <div className="text-center text-dark-emphasis">
             02/04/2024 . Mardi . 16:40
           </div>
@@ -126,17 +123,7 @@ const Chat = (props) => {
           <div className="text-center text-dark-emphasis">
             04/04/2024 . Jeudi . 22:18
           </div>
-          <div className={Styles.messageReceived}>
-            Ad curabitur porttitor proin tincidunt mi facilisi tellus ridiculus
-          </div>
-        </div>
-        <div className="d-flex align-items-center">
-          <div className="text-center text-dark-emphasis">
-            04/04/2024 . Jeudi . 22:18
-          </div>
-          <div className={Styles.messageReceived}>
-            Cursus natoque rhoncus viverra pulvinar congue tortor
-          </div>
+          <div className={Styles.messageSended}>Who are you ?</div>
         </div>
         <div className="d-flex align-items-center">
           <div>
@@ -146,12 +133,28 @@ const Chat = (props) => {
               style={senderUserProfilStyle}
             />
           </div>
-          <div className={Styles.messageSended}>
-            Nisi lectus ut elementum libero molestie himenaeos ad rutrum mi
-            malesuada
-          </div>
+          <div className={Styles.messageReceived}>I'm your new friend John</div>
           <div className="text-center text-dark-emphasis">
             10/04/2024 . Dimanche . 07:25
+          </div>
+        </div>
+        <div className="d-flex align-items-center">
+          <div className="text-center text-dark-emphasis">
+            11/04/2024 . Jeudi . 04:22
+          </div>
+          <div className={Styles.messageSended}>Thanks</div>
+        </div>
+        <div className="d-flex align-items-center">
+          <div>
+            <img
+              src={receiverProfilePicture}
+              alt="sendedUserProfil"
+              style={senderUserProfilStyle}
+            />
+          </div>
+          <div className={Styles.messageReceived}>Why ??</div>
+          <div className="text-center text-dark-emphasis">
+            11/04/2024 . Dimanche . 07:49
           </div>
         </div>
       </div>
@@ -163,7 +166,7 @@ const Chat = (props) => {
             type="text"
             name="message"
             id="message"
-            placeholder="email@gmail.com"
+            placeholder="New message..."
           />
           <span className="input-group-text">
             <i className="bi bi-send-fill"></i>

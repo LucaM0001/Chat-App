@@ -114,9 +114,6 @@ const Users = (props) => {
       <hr />
       <div id="search" className="my-4">
         <div className="input-group">
-          <span className="input-group-text">
-            <i className="bi bi-search"></i>
-          </span>
           <input
             className="form-control"
             type="search"
@@ -124,6 +121,9 @@ const Users = (props) => {
             id="password"
             placeholder="Effectuer une recherche..."
           />
+          <span className="input-group-text">
+            <i className="bi bi-search"></i>
+          </span>
         </div>
       </div>
       <div id="body" style={{ height: "400px", overflow: "auto" }}>

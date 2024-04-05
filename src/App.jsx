@@ -36,6 +36,36 @@ const App = (props) => {
       status: false,
     },
   ]);
+  /* Fonction de récupération de date */
+  const getMessageTime = () => {
+    const d = new Date();
+    const daysArray = [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ];
+
+    const date = d.toLocaleDateString();
+    const time = d.toLocaleTimeString();
+    const day = daysArray[d.getDay()];
+
+    return [date, day, time].join(" . ");
+  };
+
+  /* Messages */
+  const [messages, setMesssages] = useState([
+    {
+      id: Date.now(),
+      message: "Hello world !",
+      senderID: Date.now(),
+      receiverID: Date.now(),
+      time: getMessageTime(),
+    },
+  ]);
 
   /* Inscription */
   const handleSignUp = (newUser) => {
