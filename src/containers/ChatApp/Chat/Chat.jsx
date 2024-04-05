@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import Styles from "./Chat.module.css";
 
 import DefaultProfil from "../../../assets/img/upload/default.png";
 import AbasProfil from "../../../assets/img/upload/abas.png";
@@ -12,8 +11,16 @@ import kerenProfil from "../../../assets/img/upload/keren.jpeg";
 import MathieuProfil from "../../../assets/img/upload/mathieu.png";
 import NickProfil from "../../../assets/img/upload/nick.png";
 
+import "./Chat.css";
+import ReceivedMessage from "./Messages/ReceivedMessage/ReceivedMessage";
+import SentMessage from "./Messages/SentMessage/SentMessage";
+
+import { withFormik } from "formik";
+import * as Yup from "yup";
+import { useState } from "react";
+
 const Chat = (props) => {
-  const { receiverID } = useParams();
+  const { receiverID, senderID } = useParams();
   const users = props.users;
   const receiver = users.find((user) => user.id === Number(receiverID));
 
@@ -58,23 +65,18 @@ const Chat = (props) => {
     height: "60px",
     borderRadius: "50%",
   };
-  const senderUserProfilStyle = {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-  };
 
   return (
     <div id="chat" className="w-75">
       <div
         id="head"
-        className="d-flex justify-content-between align-items-center mb-4"
+        className="d-flex justify-content-between align-items-center mb-3 shadow p-2 rounded-4"
       >
         <div className="d-flex align-items-center">
           <div>
             <i
               className="bi bi-arrow-left fs-2"
-              id={Styles.back}
+              id="back"
               onClick={props.goBack}
             ></i>
           </div>
@@ -87,12 +89,10 @@ const Chat = (props) => {
               />
             </div>
             <div>
-              <h4>{`${receiver.firstname} ${receiver.lastname}`}</h4>
-              <div
-                className={`fw-bold ${
-                  receiver.status ? "text-success" : "text-dark-emphasis"
-                }`}
-              >{`${receiver.status ? "Online" : "Offline"}`}</div>
+              <h4>{receiver.firstname + " " + receiver.lastname}</h4>
+              <div className={`fw-bold`}>
+                {receiver.status ? "Online" : "Offline"}
+              </div>
             </div>
           </div>
         </div>
@@ -103,78 +103,51 @@ const Chat = (props) => {
 
       <div
         id="body"
-        className="px-4"
-        style={{ height: "440px", overflow: "auto" }}
+        className="px-4 shadow mb-3 rounded-4"
+        style={{ height: "420px", overflow: "auto" }}
       >
-        <div className="d-flex align-items-center">
-          <div>
-            <img
-              src={receiverProfilePicture}
-              alt="sendedUserProfil"
-              style={senderUserProfilStyle}
-            />
-          </div>
-          <div className={Styles.messageReceived}>Hi !!</div>
-          <div className="text-center text-dark-emphasis">
-            02/04/2024 . Mardi . 16:40
-          </div>
-        </div>
-        <div className="d-flex align-items-center">
-          <div className="text-center text-dark-emphasis">
-            04/04/2024 . Jeudi . 22:18
-          </div>
-          <div className={Styles.messageSended}>Who are you ?</div>
-        </div>
-        <div className="d-flex align-items-center">
-          <div>
-            <img
-              src={receiverProfilePicture}
-              alt="sendedUserProfil"
-              style={senderUserProfilStyle}
-            />
-          </div>
-          <div className={Styles.messageReceived}>I'm your new friend John</div>
-          <div className="text-center text-dark-emphasis">
-            10/04/2024 . Dimanche . 07:25
-          </div>
-        </div>
-        <div className="d-flex align-items-center">
-          <div className="text-center text-dark-emphasis">
-            11/04/2024 . Jeudi . 04:22
-          </div>
-          <div className={Styles.messageSended}>Thanks</div>
-        </div>
-        <div className="d-flex align-items-center">
-          <div>
-            <img
-              src={receiverProfilePicture}
-              alt="sendedUserProfil"
-              style={senderUserProfilStyle}
-            />
-          </div>
-          <div className={Styles.messageReceived}>Why ??</div>
-          <div className="text-center text-dark-emphasis">
-            11/04/2024 . Dimanche . 07:49
-          </div>
-        </div>
+        <ReceivedMessage
+          profilePicture={receiverProfilePicture}
+          time="10/10/10 . Lundi . 10:10:10"
+        >
+          test
+        </ReceivedMessage>
+        <SentMessage time="10/10/10 . Lundi . 10:10:10">test</SentMessage>
       </div>
 
-      <div id="send" className="my-3">
+      <div id="sendInput" className="shadow p-2 rounded-4">
         <div className="input-group">
           <input
             className="form-control"
             type="text"
             name="message"
             id="message"
-            placeholder="New message..."
+            placeholder="Message..."
+            value={props.values.message}
+            onChange={props.handleChange}
           />
           <span className="input-group-text">
-            <i className="bi bi-send-fill"></i>
+            <i className="bi bi-send-fill" onClick={props.handleSubmit}></i>
           </span>
         </div>
+        {props.touched.message && props.errors.message && (
+          <span style={{ color: "red" }}>{props.errors.message}</span>
+        )}
       </div>
     </div>
   );
 };
 
-export default Chat;
+export default withFormik({
+  mapPropsToValues: () => {
+    return {
+      message: "",
+    };
+  },
+  validationSchema: Yup.object().shape({
+    message: Yup.string().required("Veuillez saisir votre message !"),
+  }),
+  handleSubmit: (values, { props }) => {
+    props.addMessage(values.message, senderID, receiverID);
+  },
+})(Chat);

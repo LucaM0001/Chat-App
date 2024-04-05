@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .messageSended {
     text-align: center;
     background: #808080;

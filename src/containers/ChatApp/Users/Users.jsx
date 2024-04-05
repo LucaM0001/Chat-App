@@ -129,7 +129,12 @@ const Users = (props) => {
       <div id="body" style={{ height: "400px", overflow: "auto" }}>
         <ul>
           {users.map((user) => (
-            <User key={user.id} {...user} />
+            <User
+              senderID={Number(id)}
+              key={user.id}
+              receiverID={user.id}
+              {...user}
+            />
           ))}
         </ul>
       </div>

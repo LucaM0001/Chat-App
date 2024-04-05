@@ -182,8 +182,13 @@ const App = (props) => {
     }
   };
 
+  /* Ajout de message */
+  const handleAddMessage = (message, senderID, receiverID) => {
+    console.log(message, senderID, receiverID);
+  };
+
   return (
-    <div className="container d-flex justify-content-center my-4">
+    <div className="container d-flex justify-content-center my-3">
       <Routes>
         {isLoggedIn === false && isLogOut === false ? (
           <Route
@@ -223,14 +228,23 @@ const App = (props) => {
             />
           }
         />
+
         <Route
           path="/forgotpassword/:id"
           element={<ForgotPassword goBack={handleGoBack} users={users} />}
         />
+
         <Route
-          path="/chat/:receiverID"
-          element={<Chat goBack={handleGoBack} users={users} />}
+          path="/chat/:receiverID/:senderID"
+          element={
+            <Chat
+              goBack={handleGoBack}
+              addMessage={handleAddMessage}
+              users={users}
+            />
+          }
         />
+
         {!isLoggedIn && <Route path="*" element={<Navigate to="/" />} />}
         <Route path="/modal" Component={Modal} />
       </Routes>
