@@ -14,13 +14,12 @@ import NickProfil from "../../../assets/img/upload/nick.png";
 import "./Chat.css";
 import ReceivedMessage from "./Messages/ReceivedMessage/ReceivedMessage";
 import SentMessage from "./Messages/SentMessage/SentMessage";
-
-import { withFormik } from "formik";
-import * as Yup from "yup";
-import { useState } from "react";
+import SendMessageForm from "./SendMessageForm/SendMessageForm";
+import { useEffect, useState } from "react";
 
 const Chat = (props) => {
   const { receiverID, senderID } = useParams();
+
   const users = props.users;
   const receiver = users.find((user) => user.id === Number(receiverID));
 
@@ -103,51 +102,53 @@ const Chat = (props) => {
 
       <div
         id="body"
-        className="px-4 shadow mb-3 rounded-4"
-        style={{ height: "420px", overflow: "auto" }}
+        className="px-4 shadow mb-3 rounded-4 mb-3"
+        style={{ height: "400px", overflow: "auto" }}
       >
-        <ReceivedMessage
-          profilePicture={receiverProfilePicture}
-          time="10/10/10 . Lundi . 10:10:10"
-        >
-          test
-        </ReceivedMessage>
-        <SentMessage time="10/10/10 . Lundi . 10:10:10">test</SentMessage>
+        {props.messages
+          .filter(
+            (msg) =>
+              (msg.senderID === Number(senderID) &&
+                msg.receiverID === Number(receiverID)) ||
+              (msg.senderID === Number(receiverID) &&
+                msg.receiverID === Number(senderID))
+          )
+          .map((msg) => {
+            const case1 =
+              msg.senderID === Number(senderID) &&
+              msg.receiverID === Number(receiverID);
+            const case2 =
+              msg.senderID === Number(receiverID) &&
+              msg.receiverID === Number(senderID);
+
+            if (case1)
+              return (
+                <SentMessage key={msg.id} time={msg.time}>
+                  {msg.message}
+                </SentMessage>
+              );
+            else if (case2)
+              return (
+                <ReceivedMessage
+                  key={msg.id}
+                  time={msg.time}
+                  profilePicture={receiverProfilePicture}
+                >
+                  {msg.message}
+                </ReceivedMessage>
+              );
+          })}
       </div>
 
       <div id="sendInput" className="shadow p-2 rounded-4">
-        <div className="input-group">
-          <input
-            className="form-control"
-            type="text"
-            name="message"
-            id="message"
-            placeholder="Message..."
-            value={props.values.message}
-            onChange={props.handleChange}
-          />
-          <span className="input-group-text">
-            <i className="bi bi-send-fill" onClick={props.handleSubmit}></i>
-          </span>
-        </div>
-        {props.touched.message && props.errors.message && (
-          <span style={{ color: "red" }}>{props.errors.message}</span>
-        )}
+        <SendMessageForm
+          senderID={Number(senderID)}
+          receiverID={Number(receiverID)}
+          addMessage={props.addMessage}
+        />
       </div>
     </div>
   );
 };
 
-export default withFormik({
-  mapPropsToValues: () => {
-    return {
-      message: "",
-    };
-  },
-  validationSchema: Yup.object().shape({
-    message: Yup.string().required("Veuillez saisir votre message !"),
-  }),
-  handleSubmit: (values, { props }) => {
-    props.addMessage(values.message, senderID, receiverID);
-  },
-})(Chat);
+export default Chat;

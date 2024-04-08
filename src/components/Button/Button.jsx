@@ -1,7 +1,7 @@
 const Button = (props) => {
   return (
     <button
-      className={`btn ${props.color}`}
+      className={`btn ${props.color} ${props.css}`}
       type={props.type}
       onClick={props.clic}
     >

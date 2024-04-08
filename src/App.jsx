@@ -57,15 +57,7 @@ const App = (props) => {
   };
 
   /* Messages */
-  const [messages, setMesssages] = useState([
-    {
-      id: Date.now(),
-      message: "Hello world !",
-      senderID: Date.now(),
-      receiverID: Date.now(),
-      time: getMessageTime(),
-    },
-  ]);
+  const [messages, setMesssages] = useState([]);
 
   /* Inscription */
   const handleSignUp = (newUser) => {
@@ -184,7 +176,16 @@ const App = (props) => {
 
   /* Ajout de message */
   const handleAddMessage = (message, senderID, receiverID) => {
-    console.log(message, senderID, receiverID);
+    const newMessages = [...messages];
+    const newMessage = {
+      id: Date.now(),
+      message,
+      senderID,
+      receiverID,
+      time: getMessageTime(),
+    };
+
+    setMesssages((oldMessages) => [...oldMessages, newMessage]);
   };
 
   return (
@@ -241,6 +242,7 @@ const App = (props) => {
               goBack={handleGoBack}
               addMessage={handleAddMessage}
               users={users}
+              messages={[...messages]}
             />
           }
         />
