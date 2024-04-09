@@ -5,9 +5,9 @@ import Button from "../../../../components/Button/Button";
 const SendMessageForm = (props) => {
   return (
     <form>
-      <div className="input-group">
+      <div className="d-flex">
         <input
-          className="form-control"
+          className="form-control me-2"
           type="text"
           name="message"
           id="message"
@@ -16,10 +16,13 @@ const SendMessageForm = (props) => {
           onChange={props.handleChange}
           onBlur={props.handleBlur}
         />
-        <Button type="submit" css="btn-xs" clic={props.handleSubmit}>
-          <span className="input-group-text">
-            <i className="bi bi-send-fill"></i>
-          </span>
+        <Button
+          color="btn-primary"
+          type="submit"
+          css="btn-xs"
+          clic={props.handleSubmit}
+        >
+          <i className="bi bi-send-fill"></i>
         </Button>
       </div>
       {props.touched.message && props.errors.message && (

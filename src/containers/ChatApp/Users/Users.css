@@ -9,3 +9,7 @@
     padding: 5px 10px;
     border-radius: 50%;
 }
+
+.bi-search {
+    cursor: pointer;
+}

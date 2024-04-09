@@ -1,28 +1,37 @@
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import LoginForm from "./containers/Forms/LoginForm/LoginForm";
 import SignUpForm from "./containers/Forms/SignUpForm/SignUpForm";
-import Users from "./containers/ChatApp/Users/Users";
 import Chat from "./containers/ChatApp/Chat/Chat";
 import ForgotPassword from "./containers/Forms/ForgotPassword/ForgotPassword";
 import { useState } from "react";
 import Modal from "./components/Modal/Modal";
+import Users from "./containers/ChatApp/Users/Users.jsx";
 
 const App = (props) => {
   /* Inscription réussi ? */
   const [isSignedIn, setIsSignedIn] = useState(false);
+
   /* Connexion réussi ? */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   /* Adresse email déja utilisé ? */
   const [isEmailUsed, setIsEmailUsed] = useState(false);
+
   /* Mot de passe indentique  */
   const [isSamePassword, setIsSamePassword] = useState(false);
+
   /* Image valide */
   const [isNotValidImage, setIsNotValidImage] = useState(false);
+
   /* Déconnexion */
   const [isLogOut, setIsLogOut] = useState(false);
 
+  /* Recherche */
+  const [isSearch, setIsSearch] = useState(false);
+
   /* Navigation */
   const navigate = useNavigate();
+
   /* Utilisateurs */
   const [users, setUsers] = useState([
     {
@@ -36,6 +45,10 @@ const App = (props) => {
       status: false,
     },
   ]);
+
+  /* Utilisateurs trouvé */
+  const [usersFound, setUsersFound] = useState([]);
+
   /* Fonction de récupération de date */
   const getMessageTime = () => {
     const d = new Date();
@@ -74,9 +87,12 @@ const App = (props) => {
         newUser.id = Date.now();
         /* Photo de profil */
         const validImageExtension = ["png", "jpg", "jpeg"];
-        if (newUser.profilePicture === "")
+        if (newUser.profilePicture === "") {
           newUser.profilePicture = "default.png";
-        else {
+          setUsers((oldUsers) => [...oldUsers, newUser]);
+          setIsSignedIn(true);
+          navigate("/");
+        } else {
           let profileFile = "";
           const profile = newUser.profilePicture;
           const profileArray = profile.split("\\");
@@ -188,6 +204,31 @@ const App = (props) => {
     setMesssages((oldMessages) => [...oldMessages, newMessage]);
   };
 
+  /* Activation recherche */
+  const handleEnableSeach = (input) => {
+    if (input.disabled) input.disabled = false;
+    else input.disabled = true;
+  };
+
+  /* Recherche */
+  const handleSearch = (value) => {
+    if (value) {
+      setIsSearch(true);
+
+      const usersFoundArray = users.filter(
+        (user) =>
+          user.firstname[0].toLocaleLowerCase() ===
+            value[0].toLocaleLowerCase() ||
+          user.firstname.toLocaleLowerCase() === value.toLocaleLowerCase()
+      );
+
+      setUsersFound(usersFoundArray);
+    } else {
+      setIsSearch(false);
+      setUsersFound([]);
+    }
+  };
+
   return (
     <div className="container d-flex justify-content-center my-3">
       <Routes>
@@ -208,11 +249,15 @@ const App = (props) => {
             element={
               <Users
                 users={users}
+                usersFound={usersFound}
                 isLogOut={isLogOut}
                 confirmLogOut={handleConfirmLogout}
                 deniedLogOut={handleDeniedLogout}
                 logOut={handleLogOut}
                 changeProfilePicture={handleChangeProfilePicture}
+                enableSeach={handleEnableSeach}
+                search={handleSearch}
+                isSearch={isSearch}
               />
             }
           />

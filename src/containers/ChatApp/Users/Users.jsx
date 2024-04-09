@@ -13,11 +13,11 @@ import Button from "../../../components/Button/Button";
 import User from "./User/User";
 import Modal from "../../../components/Modal/Modal";
 import "./Users.css";
+import { useState } from "react";
 
 const Users = (props) => {
   const { id } = useParams();
-  const users = props.users;
-  const currentUser = users.find((user) => user.id === Number(id));
+  const currentUser = props.users.find((user) => user.id === Number(id));
 
   const userProfileStyle = {
     width: "100px",
@@ -92,7 +92,7 @@ const Users = (props) => {
               id="newProfilePicture"
               className="d-none"
               onChange={(e) =>
-                props.changeProfilePicture(e.currentTarget.value, id)
+                props.changeProfilePicture(e.currentTarget.value, Number(id))
               }
             />
           </div>
@@ -113,29 +113,45 @@ const Users = (props) => {
       </div>
       <hr />
       <div id="search" className="my-4">
-        <div className="input-group">
+        <div className="d-flex">
           <input
-            className="form-control"
+            className="form-control me-2"
             type="search"
-            name="password"
-            id="password"
+            name="searchInput"
+            id="searchInput"
+            disabled
             placeholder="Effectuer une recherche..."
+            onKeyUp={(e) => props.search(e.target.value)}
           />
-          <span className="input-group-text">
+          <Button
+            color="btn-primary"
+            clic={() =>
+              props.enableSeach(document.getElementById("searchInput"))
+            }
+          >
             <i className="bi bi-search"></i>
-          </span>
+          </Button>
         </div>
       </div>
       <div id="body" style={{ height: "400px", overflow: "auto" }}>
-        <ul>
-          {users.map((user) => (
-            <User
-              senderID={Number(id)}
-              key={user.id}
-              receiverID={user.id}
-              {...user}
-            />
-          ))}
+        <ul id="user-list">
+          {props.isSearch
+            ? props.usersFound.map((user) => (
+                <User
+                  senderID={Number(id)}
+                  key={user.id}
+                  receiverID={user.id}
+                  {...user}
+                />
+              ))
+            : props.users.map((user) => (
+                <User
+                  senderID={Number(id)}
+                  key={user.id}
+                  receiverID={user.id}
+                  {...user}
+                />
+              ))}
         </ul>
       </div>
     </div>
