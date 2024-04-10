@@ -60,34 +60,44 @@ const User = (props) => {
       (msg.senderID === props.receiverID && msg.receiverID === props.senderID)
   );
 
-  console.log(concernedMessages);
-
   let lastMessage,
-    lastMsg = "",
+    lastMessageTime,
+    lastMsg,
     prefix = "You : ";
 
   if (concernedMessages.length > 0) {
     lastMessage = concernedMessages.at(-1);
+    lastMessageTime = lastMessage.time;
 
     if (
       lastMessage.senderID === props.senderID &&
       lastMessage.receiverID === props.receiverID
     ) {
       lastMsg = (
-        <span>
-          <span className="text-primary">{prefix}</span>
-          {lastMessage.message}
-        </span>
+        <div className="d-flex">
+          <div className="me-4">
+            <span className="text-primary">{prefix}</span>
+            {lastMessage.message.slice(0, 25)}
+            {lastMessage.message.length >= 25 && "..."}
+          </div>
+          <div className="text-danger">{lastMessageTime}</div>
+        </div>
       );
-      if (lastMsg.length >= 25) lastMsg = lastMsg.concat("...");
     } else if (
       lastMessage.senderID === props.receiverID &&
       lastMessage.receiverID === props.senderID
     ) {
-      lastMsg = lastMessage.message.slice(0, 25);
-      if (lastMsg.length >= 25) lastMsg = lastMsg.concat("...");
+      lastMsg = (
+        <div className="d-flex">
+          <div className="me-4">
+            {lastMessage.message.slice(0, 25)}
+            {lastMessage.message.length >= 25 && "..."}
+          </div>
+          <div className="text-danger">{lastMessageTime}</div>
+        </div>
+      );
     }
-  } else lastMsg = "Aucun message envoyé";
+  } else lastMsg = <span>Aucun message envoyé</span>;
 
   return (
     <Link
