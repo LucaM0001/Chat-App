@@ -142,6 +142,7 @@ const Users = (props) => {
                   key={user.id}
                   receiverID={user.id}
                   {...user}
+                  messages={props.messages}
                 />
               ))
             : props.users.map((user) => (

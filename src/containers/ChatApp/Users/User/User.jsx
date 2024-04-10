@@ -53,6 +53,42 @@ const User = (props) => {
       null;
   }
 
+  const concernedMessages = props.messages.filter(
+    (msg) =>
+      (msg.senderID === props.senderID &&
+        msg.receiverID === props.receiverID) ||
+      (msg.senderID === props.receiverID && msg.receiverID === props.senderID)
+  );
+
+  console.log(concernedMessages);
+
+  let lastMessage,
+    lastMsg = "",
+    prefix = "You : ";
+
+  if (concernedMessages.length > 0) {
+    lastMessage = concernedMessages.at(-1);
+
+    if (
+      lastMessage.senderID === props.senderID &&
+      lastMessage.receiverID === props.receiverID
+    ) {
+      lastMsg = (
+        <span>
+          <span className="text-primary">{prefix}</span>
+          {lastMessage.message}
+        </span>
+      );
+      if (lastMsg.length >= 25) lastMsg = lastMsg.concat("...");
+    } else if (
+      lastMessage.senderID === props.receiverID &&
+      lastMessage.receiverID === props.senderID
+    ) {
+      lastMsg = lastMessage.message.slice(0, 25);
+      if (lastMsg.length >= 25) lastMsg = lastMsg.concat("...");
+    }
+  } else lastMsg = "Aucun message envoyé";
+
   return (
     <Link
       to={`/chat/${props.receiverID}/${props.senderID}`}
@@ -70,7 +106,7 @@ const User = (props) => {
           </div>
           <div className="ps-4">
             <h5 className="fw-bold">{`${props.firstname} ${props.lastname}`}</h5>
-            <div>Denière message envoyé</div>
+            <div>{lastMsg}</div>
           </div>
         </div>
         <div
