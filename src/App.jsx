@@ -47,7 +47,14 @@ const App = (props) => {
   ]);
 
   /* Utilisateurs trouvé */
-  const [usersFound, setUsersFound] = useState([]);
+  const [usersFound, setUsersFound] = useState([
+    {
+      id: Date.now(),
+      message: "Default message",
+      senderID: Date.now(),
+      receiverID: Date.now(),
+    },
+  ]);
 
   /* Fonction de récupération de date */
   const getMessageTime = () => {
@@ -77,15 +84,15 @@ const App = (props) => {
     const isAlreadySigned = users.find((user) => user.email === newUser.email)
       ? true
       : false;
-    /* Adresse email */
+    /* Adresse email ? */
     if (isAlreadySigned === false) {
       setIsEmailUsed(false);
-      /* Mot de passe */
+      /* Mot de passe ? */
       if (newUser.password === newUser.confirmPassword) {
         setIsSamePassword(false);
         /* Identifiant */
         newUser.id = Date.now();
-        /* Photo de profil */
+        /* Photo de profil ? */
         const validImageExtension = ["png", "jpg", "jpeg"];
         if (newUser.profilePicture === "") {
           newUser.profilePicture = "default.png";
@@ -249,6 +256,7 @@ const App = (props) => {
             element={
               <Users
                 users={users}
+                messages={messages}
                 usersFound={usersFound}
                 isLogOut={isLogOut}
                 confirmLogOut={handleConfirmLogout}

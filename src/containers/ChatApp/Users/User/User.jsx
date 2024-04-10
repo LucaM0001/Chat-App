@@ -70,7 +70,7 @@ const User = (props) => {
           </div>
           <div className="ps-4">
             <h5 className="fw-bold">{`${props.firstname} ${props.lastname}`}</h5>
-            <div>Dernière message envoyé</div>
+            <div>Denière message envoyé</div>
           </div>
         </div>
         <div
