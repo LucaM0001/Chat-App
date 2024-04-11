@@ -75,12 +75,12 @@ const User = (props) => {
     ) {
       lastMsg = (
         <div className="d-flex">
-          <div className="me-4">
+          <div className="me-4 text-dark-emphasis">
             <span className="text-primary">{prefix}</span>
             {lastMessage.message.slice(0, 25)}
             {lastMessage.message.length >= 25 && "..."}
           </div>
-          <div className="text-danger">{lastMessageTime}</div>
+          <div className="text-secondary">{lastMessageTime}</div>
         </div>
       );
     } else if (
@@ -89,15 +89,16 @@ const User = (props) => {
     ) {
       lastMsg = (
         <div className="d-flex">
-          <div className="me-4">
+          <div className="me-4 text-dark-emphasis">
             {lastMessage.message.slice(0, 25)}
             {lastMessage.message.length >= 25 && "..."}
           </div>
-          <div className="text-danger">{lastMessageTime}</div>
+          <div className="text-secondary">{lastMessageTime}</div>
         </div>
       );
     }
-  } else lastMsg = <span>Aucun message envoyé</span>;
+  } else
+    lastMsg = <div className="d-flex text-secondary">Aucun message envoyé</div>;
 
   return (
     <Link
